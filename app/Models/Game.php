@@ -16,6 +16,7 @@ class Game extends Model
         'url_game',
         'size_mb',
         'description',
+        'synopsis',
         'image'
     ];
 

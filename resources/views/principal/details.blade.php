@@ -225,6 +225,31 @@
 
             </div>
 
+            {{-- =================================================
+                Sinopsis
+            ================================================== --}}
+
+            <section class="game-detail-description">
+
+                <h2>
+                    <i class="fa-solid fa-align-left"></i>
+                    Sinopsis
+                </h2>
+
+
+                @if($game->synopsis)
+                    <div class="game-detail-description-text">
+                        {!! $game->synopsis !!}
+                    </div>
+                @else
+                    <p class="game-detail-empty">
+                        No hay una sinopsis disponible para este juego.
+                    </p>
+                @endif
+
+
+            </section>
+
 
             {{-- =================================================
                 DESCRIPCIÓN

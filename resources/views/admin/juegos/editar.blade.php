@@ -122,6 +122,23 @@
                             </div>
 
                         </div>
+                        <div class="md:col">
+
+                            <div class="form-control">
+
+                                <label>Sinopsis</label>
+
+                                <text-area-tiny
+                                    name="synopsis"
+                                    v-model="fields.synopsis"
+                                    initial-value="{{ $juego->synopsis }}"
+                                ></text-area-tiny>
+
+                                <field-errors name="synopsis"></field-errors>
+
+                            </div>
+
+                        </div>
 
                     </div>
 

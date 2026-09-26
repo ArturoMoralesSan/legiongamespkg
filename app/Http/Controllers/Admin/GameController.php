@@ -145,6 +145,7 @@ class GameController extends Controller
             'url_game' => 'nullable|max:255',
             'size_mb' => 'nullable|string',
             'description' => 'nullable',
+            'synopsis' => 'nullable',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
             'platforms' => 'array',
             'regions' => 'array',
@@ -173,6 +174,7 @@ class GameController extends Controller
             'url_game' => $request->url_game,
             'size_mb' => $request->size_mb,
             'description' => $request->description,
+            'synopsis' => $request->synopsis,
             'image' => $image,
         ]);
 
@@ -332,6 +334,7 @@ class GameController extends Controller
             'url_game' => $request->url_game,
             'size_mb' => $request->size_mb,
             'description' => $request->description,
+            'synopsis' => $request->synopsis,
             'image' => $image,
         ]);
 
