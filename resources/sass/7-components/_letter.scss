@@ -1,0 +1,17 @@
+.disabled-card{
+    opacity:.35;
+    pointer-events:none;
+}
+
+.letter-image{
+    width:80px;
+    height:80px;
+    object-fit:cover;
+    border-radius:10px;
+}
+
+.letter-placeholder{
+    font-size:70px;
+    font-weight:bold;
+    color:#ffffff;
+}

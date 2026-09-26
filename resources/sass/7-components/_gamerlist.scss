@@ -1,0 +1,1199 @@
+/* ==========================================
+   GAME LIST PREMIUM NEON
+========================================== */
+
+.gamelist-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.gamelist--title {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 800;
+    color: #f8fafc;
+}
+
+.gamelist--title i {
+    background: linear-gradient(
+        135deg,
+        #3b82f6,
+        #8b5cf6,
+        #ec4899
+    );
+
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.see-more {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    color: #a78bfa;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 700;
+
+    transition: .25s ease;
+}
+
+.see-more:hover {
+    color: #c4b5fd;
+}
+
+.see-more:hover i {
+    transform: translateX(4px);
+}
+
+/* ==========================================
+   LIST
+========================================== */
+
+.game-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* ==========================================
+   CARD
+========================================== */
+
+.game-row {
+    position: relative;
+    overflow: hidden;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    background: rgba(7, 11, 26, 0.92);
+
+    border: 1px solid rgba(139, 92, 246, 0.15);
+    border-radius: 16px;
+
+    padding: 16px 18px;
+
+    transition: all .3s ease;
+}
+
+/* glow bg */
+.game-row::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background:
+        radial-gradient(
+            circle at top left,
+            rgba(59,130,246,.08),
+            transparent 55%
+        ),
+        radial-gradient(
+            circle at bottom right,
+            rgba(168,85,247,.08),
+            transparent 55%
+        );
+
+    opacity: 0;
+    transition: .3s ease;
+}
+
+/* neon top border */
+.game-row::after {
+    content: "";
+
+    position: absolute;
+
+    left: 20%;
+    top: 0;
+
+    width: 60%;
+    height: 2px;
+
+    background: linear-gradient(
+        90deg,
+        #3b82f6,
+        #8b5cf6,
+        #ec4899
+    );
+
+    opacity: .5;
+}
+
+/* content over effects */
+.game-row > * {
+    position: relative;
+    z-index: 2;
+}
+
+.game-row:hover {
+    transform: translateY(-4px);
+
+    border-color: rgba(168,85,247,.45);
+
+    box-shadow:
+        0 0 10px rgba(59,130,246,.15),
+        0 0 25px rgba(139,92,246,.18),
+        0 0 40px rgba(236,72,153,.10);
+}
+
+.game-row:hover::before {
+    opacity: 1;
+}
+
+/* ==========================================
+   IMAGE
+========================================== */
+
+.game-image {
+    flex-shrink: 0;
+    margin-right: 16px;
+}
+
+.game-image img {
+    width: 90px;
+    height: 90px;
+
+    object-fit: cover;
+
+    border-radius: 12px;
+
+    border: 1px solid rgba(168,85,247,.2);
+
+    transition: .3s ease;
+}
+
+.game-row:hover .game-image img {
+    transform: scale(1.05);
+
+    box-shadow:
+        0 0 12px rgba(59,130,246,.2),
+        0 0 25px rgba(168,85,247,.2);
+}
+
+.game-image-placeholder {
+    width: 90px;
+    height: 90px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 12px;
+
+    background: rgba(255,255,255,.04);
+
+    border: 1px solid rgba(168,85,247,.2);
+
+    color: #8b5cf6;
+    font-size: 32px;
+}
+
+/* ==========================================
+   INFO
+========================================== */
+
+.game-info {
+    flex: 1;
+}
+
+.game-title {
+    margin: 0 0 8px;
+
+    font-size: 15px;
+    font-weight: 800;
+
+    color: #f8fafc;
+}
+
+.game-size {
+    font-size: 12px;
+    color: #94a3b8;
+}
+
+/* ==========================================
+   TAGS
+========================================== */
+
+.game-tags,
+.tag-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+}
+
+.tag {
+    background: rgba(255,255,255,.03) !important;
+
+    border: 1px solid rgba(168,85,247,.15);
+
+    color: #cbd5e1;
+
+    border-radius: 999px !important;
+
+    transition: .25s ease;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    padding: 6px 14px;
+
+    min-height: 32px;
+
+    white-space: nowrap;
+
+    text-align: center;
+}
+
+.tag:hover {
+    border-color: rgba(168,85,247,.45);
+
+    color: #fff;
+
+    box-shadow:
+        0 0 8px rgba(139,92,246,.15);
+}
+
+.tag.active {
+    background: rgba(168,85,247,.15) !important;
+
+    border: 1px solid rgba(168,85,247,.45);
+
+    color: #fff;
+
+    box-shadow:
+        0 0 10px rgba(59,130,246,.15),
+        0 0 20px rgba(168,85,247,.15);
+}
+
+
+/* ==========================================
+   DOWNLOAD
+========================================== */
+.game-download-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 15px;
+    align-items: center;
+}
+
+@media (max-width: 768px) {
+    .game-download-grid {
+        grid-template-columns: repeat(auto-fit, max-content);
+    }
+}
+
+.download-btn {
+    width: fit-content;
+    height: auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+    padding: 10px 14px;
+
+    border-radius: 12px;
+    text-decoration: none;
+
+    background: rgba(59, 130, 246, 0.08);
+    border: 1px solid rgba(168, 85, 247, 0.25);
+
+    transition: .3s ease;
+}
+
+.download-btn i {
+    font-size: 16px;
+
+    background: linear-gradient(
+        135deg,
+        #3b82f6,
+        #8b5cf6,
+        #ec4899
+    );
+
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.download-btn:hover {
+    transform: translateY(-2px);
+
+    border-color: rgba(168,85,247,.5);
+
+    background: rgba(168,85,247,.12);
+
+    box-shadow:
+        0 0 10px rgba(59,130,246,.2),
+        0 0 20px rgba(168,85,247,.2);
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media (max-width: 768px) {
+
+    .game-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .download-btn {
+        align-self: flex-end;
+    }
+
+}
+
+.tag {
+    background: rgba(255, 255, 255, .03) !important;
+    border: 1px solid rgba(168, 85, 247, .15);
+    color: #cbd5e1;
+    border-radius: 999px !important;
+    transition: .25s ease;
+}
+
+/* ==========================================
+   GAMES GRID
+========================================== */
+
+.games-content {
+    flex: 2;
+    min-width: 0;
+}
+
+.games-card-grid {
+    display: grid;
+
+    grid-template-columns: repeat(
+        auto-fill,
+        minmax(220px, 1fr)
+    );
+
+    gap: 20px;
+}
+
+
+/* ==========================================
+   GAME CARD
+========================================== */
+
+.games-card {
+    display: block;
+
+    overflow: hidden;
+
+    text-decoration: none !important;
+
+    background: rgba(7, 11, 26, .92);
+
+    border: 1px solid rgba(139, 92, 246, .15);
+
+    border-radius: 16px;
+
+    transition:
+        transform .3s ease,
+        border-color .3s ease,
+        box-shadow .3s ease;
+
+    cursor: pointer;
+}
+
+.games-card:hover {
+    transform: translateY(-6px);
+
+    border-color: rgba(168, 85, 247, .5);
+
+    box-shadow:
+        0 10px 25px rgba(0,0,0,.35),
+        0 0 20px rgba(139,92,246,.15);
+}
+
+
+/* ==========================================
+   CARD IMAGE
+========================================== */
+
+.games-card-image {
+    position: relative;
+
+    width: 100%;
+
+    aspect-ratio: 16 / 10;
+
+    overflow: hidden;
+
+    background: rgba(255,255,255,.03);
+}
+
+.games-card-image img {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    transition: transform .4s ease;
+}
+
+.games-card:hover .games-card-image img {
+    transform: scale(1.06);
+}
+
+
+/* ==========================================
+   PLACEHOLDER
+========================================== */
+
+.games-card-placeholder {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    color: #64748b;
+
+    font-size: 42px;
+}
+
+
+/* ==========================================
+   OVERLAY
+========================================== */
+
+.games-card-overlay {
+    position: absolute;
+
+    inset: 0;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 6px;
+
+    background: rgba(7, 11, 26, .72);
+
+    color: #fff;
+
+    opacity: 0;
+
+    transition: opacity .3s ease;
+}
+
+.games-card:hover .games-card-overlay {
+    opacity: 1;
+}
+
+.games-card-overlay i {
+    font-size: 28px;
+
+    color: #a855f7;
+}
+
+.games-card-overlay span {
+    font-size: 13px;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: .5px;
+}
+
+
+/* ==========================================
+   CARD BODY
+========================================== */
+
+.games-card-body {
+    padding: 14px 16px 16px;
+}
+
+
+/* ==========================================
+   TITLE
+========================================== */
+
+.games-card-title {
+    margin: 0;
+
+    color: #f8fafc;
+
+    font-size: 17px;
+
+    font-weight: 800;
+
+    line-height: 1.3;
+
+    display: -webkit-box;
+
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+
+    overflow: hidden;
+}
+
+
+/* ==========================================
+   SIZE
+========================================== */
+
+.games-card-size {
+    margin: 7px 0 10px;
+
+    color: #64748b;
+
+    font-size: 12px;
+}
+
+
+/* ==========================================
+   TAGS
+========================================== */
+
+.games-card-tags {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 6px;
+}
+
+.games-card-tag {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    min-height: 26px;
+
+    padding: 4px 9px;
+
+    background: rgba(255,255,255,.03);
+
+    border: 1px solid rgba(168,85,247,.15);
+
+    border-radius: 999px;
+
+    color: #cbd5e1;
+
+    font-size: 11px;
+
+    white-space: nowrap;
+}
+
+
+/* ==========================================
+   LOADING / EMPTY
+========================================== */
+
+.games-loading,
+.games-empty {
+    color: #94a3b8;
+}
+
+
+/* =====================================================
+   GAME DETAIL
+===================================================== */
+
+.game-detail-page {
+    color: #f8fafc;
+}
+
+
+/* =====================================================
+   HERO
+===================================================== */
+
+.game-detail-hero-label {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: #a855f7;
+
+    font-size: 12px;
+    font-weight: 800;
+
+    letter-spacing: 3px;
+
+    text-align: center;
+}
+
+
+/* =====================================================
+   CONTENEDOR
+===================================================== */
+
+.game-detail-page .container {
+    position: relative;
+}
+
+
+/* =====================================================
+   VOLVER
+===================================================== */
+
+.game-detail-back {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    margin: 25px 0 18px;
+
+    padding: 9px 14px;
+
+    background: rgba(7, 11, 26, .8);
+
+    border: 1px solid rgba(139, 92, 246, .18);
+
+    border-radius: 9px;
+
+    color: #94a3b8;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    text-decoration: none !important;
+
+    transition: all .25s ease;
+}
+
+.game-detail-back:hover {
+    color: #fff;
+
+    border-color: rgba(168, 85, 247, .45);
+
+    background: rgba(168, 85, 247, .08);
+
+    transform: translateX(-3px);
+}
+
+
+/* =====================================================
+   BLOQUE PRINCIPAL
+===================================================== */
+
+.game-detail-main {
+    display: grid;
+
+    grid-template-columns:
+        minmax(280px, 420px)
+        minmax(0, 1fr);
+
+    gap: 38px;
+
+    padding: 28px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(10, 15, 35, .98),
+            rgba(7, 11, 26, .96)
+        );
+
+    border: 1px solid rgba(139, 92, 246, .16);
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 15px 40px rgba(0,0,0,.25);
+
+    position: relative;
+
+    overflow: hidden;
+}
+
+
+/* Línea superior */
+
+.game-detail-main::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 10%;
+
+    width: 80%;
+    height: 2px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            #3b82f6,
+            #8b5cf6,
+            #ec4899,
+            transparent
+        );
+
+    opacity: .7;
+}
+
+
+/* =====================================================
+   PORTADA
+===================================================== */
+
+.game-detail-cover {
+    width: 100%;
+    max-width: 325px;
+    margin: 0 auto;
+}
+
+.game-detail-cover img {
+    display: block;
+    border-radius: 20px;
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    transition: transform .5s ease;
+}
+
+.game-detail-cover:hover img {
+    transform: scale(1.025);
+}
+
+
+/* =====================================================
+   PLACEHOLDER
+===================================================== */
+
+.game-detail-placeholder {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    color: #334155;
+
+    font-size: 70px;
+}
+
+
+/* =====================================================
+   INFORMACIÓN
+===================================================== */
+
+.game-detail-info {
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    min-width: 0;
+
+    padding: 10px 10px 10px 0;
+}
+
+
+/* =====================================================
+   LABEL
+===================================================== */
+
+.game-detail-label {
+    display: inline-block;
+
+    margin-bottom: 8px;
+
+    color: #a855f7;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    letter-spacing: 2px;
+
+    text-transform: uppercase;
+}
+
+
+/* =====================================================
+   TITULO
+===================================================== */
+
+.game-detail-title {
+    margin: 0 0 22px;
+
+    color: #fff;
+
+    font-size: clamp(30px, 4vw, 48px);
+
+    font-weight: 900;
+
+    line-height: 1.05;
+
+    letter-spacing: -.5px;
+
+    overflow-wrap: anywhere;
+    font-size: 1.5rem;
+}
+
+
+/* =====================================================
+   SECCIONES
+===================================================== */
+
+.game-detail-section {
+    margin-bottom: 20px;
+}
+
+.game-detail-section-title {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: #64748b;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    letter-spacing: 1px;
+
+    text-transform: uppercase;
+}
+
+.game-detail-section-title i {
+    margin-right: 5px;
+
+    color: #8b5cf6;
+}
+
+
+/* =====================================================
+   TAGS
+===================================================== */
+
+.game-detail-tags {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 7px;
+}
+
+.game-detail-tag {
+    display: inline-flex;
+
+    align-items: center;
+
+    padding: 7px 11px;
+
+    background: rgba(168,85,247,.07);
+
+    border: 1px solid rgba(168,85,247,.18);
+
+    border-radius: 8px;
+
+    color: #cbd5e1;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    transition: .2s ease;
+}
+
+.game-detail-tag:hover {
+    background: rgba(168,85,247,.13);
+
+    border-color: rgba(168,85,247,.35);
+
+    color: #fff;
+}
+
+
+/* =====================================================
+   DATOS
+===================================================== */
+
+.game-detail-data {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    max-width: 440px;
+
+    padding: 13px 0;
+
+    border-top: 1px solid rgba(255,255,255,.06);
+
+    color: #64748b;
+
+    font-size: 13px;
+}
+
+.game-detail-data span {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+}
+
+.game-detail-data i {
+    color: #8b5cf6;
+
+    width: 16px;
+
+    text-align: center;
+}
+
+.game-detail-data strong {
+    color: #e2e8f0;
+
+    font-weight: 700;
+}
+
+
+/* =====================================================
+   DESCRIPCIÓN
+===================================================== */
+
+.game-detail-description {
+    margin-top: 22px;
+
+    padding: 28px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(10, 15, 35, .98),
+            rgba(7, 11, 26, .96)
+        );
+
+    border: 1px solid rgba(139,92,246,.16);
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 12px 30px rgba(0,0,0,.2);
+}
+
+
+/* =====================================================
+   TITULO DESCRIPCIÓN
+===================================================== */
+
+.game-detail-description h2 {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin: 0 0 18px;
+
+    padding-bottom: 14px;
+
+    border-bottom: 1px solid rgba(255,255,255,.06);
+
+    color: #fff;
+
+    font-size: 20px;
+
+    font-weight: 800;
+}
+
+.game-detail-description h2 i {
+    color: #a855f7;
+}
+
+
+/* =====================================================
+   TEXTO
+===================================================== */
+
+.game-detail-description-text {
+    max-width: 900px;
+
+    color: #94a3b8;
+
+    font-size: 15px;
+
+    line-height: 1.8;
+
+    white-space: normal;
+
+    overflow-wrap: anywhere;
+}
+
+
+/* =====================================================
+   SIN DESCRIPCIÓN
+===================================================== */
+
+.game-detail-empty {
+    margin: 0;
+
+    color: #64748b;
+
+    font-size: 14px;
+
+    font-style: italic;
+}
+
+
+/* =====================================================
+   ENLACE
+===================================================== */
+
+.game-detail-link {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-top: 25px;
+
+    padding: 11px 17px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(59,130,246,.12),
+            rgba(168,85,247,.14)
+        );
+
+    border: 1px solid rgba(168,85,247,.28);
+
+    border-radius: 9px;
+
+    color: #e2e8f0;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    text-decoration: none !important;
+
+    transition: all .25s ease;
+}
+
+.game-detail-link:hover {
+    color: #fff;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(59,130,246,.2),
+            rgba(168,85,247,.22)
+        );
+
+    border-color: rgba(168,85,247,.55);
+
+    box-shadow:
+        0 0 20px rgba(139,92,246,.12);
+
+    transform: translateY(-2px);
+}
+
+.game-detail-link i:first-child {
+    color: #a855f7;
+}
+
+.game-detail-link i:last-child {
+    font-size: 11px;
+
+    opacity: .7;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 900px) {
+
+    .game-detail-main {
+        grid-template-columns: 1fr;
+
+        gap: 25px;
+
+        padding: 20px;
+    }
+
+    .game-detail-cover {
+        max-width: 550px;
+
+        margin: 0 auto;
+    }
+
+    .game-detail-info {
+        padding: 0;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .game-detail-page .container {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .game-detail-main {
+        padding: 14px;
+
+        border-radius: 15px;
+    }
+
+    .game-detail-description {
+        padding: 18px;
+
+        border-radius: 15px;
+    }
+
+    .game-detail-title {
+        font-size: 30px;
+
+        margin-bottom: 18px;
+    }
+
+    .game-detail-data {
+        max-width: 100%;
+    }
+
+    .game-detail-back {
+        margin-top: 16px;
+    }
+
+}
+
+

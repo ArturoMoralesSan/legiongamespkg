@@ -1,0 +1,21 @@
+{
+    "name": "Cluster Minero de Durango",
+    "short_name": "CMDurango",
+    "start_url": "/",
+    "display": "standalone",
+    "theme_color": "#1f1f34",
+    "background_color": "#1f1f34",
+    "icons": [
+        {
+            "src": "/img/icons/icon-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/img/icons/icon-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}
+

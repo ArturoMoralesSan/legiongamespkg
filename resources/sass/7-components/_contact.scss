@@ -1,0 +1,58 @@
+.row-gap {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+/* Estilo base para las columnas */
+.contacto-card {
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.contacto-info {
+  background-color: #0f0f20;
+  color: #fafafa;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilo de contenido dentro de la info */
+.contacto-info .info-content {
+  background-color: transparent;
+  padding: 0;
+  box-shadow: none;
+  color: #c7c7c7;
+}
+
+.info-content p {
+  margin-bottom: 12px;
+  font-size: 0.95rem;
+}
+
+.info-content a {
+  color: #c7c7c7;
+  text-decoration: none;
+}
+
+.info-content a:hover {
+  color: #fafafa;
+  text-decoration: underline;
+}
+
+/* ✅ Responsive solo para móviles */
+@media (max-width: 768px) {
+  .row-gap {
+    flex-direction: column;
+  }
+
+  .contacto-info {
+    margin-bottom: 20px;
+    order: 1; /* Muestra la info primero en pantallas pequeñas */
+  }
+   .contacto-card {
+    order: 2; /* Muestra la info primero en pantallas pequeñas */
+  }
+}
