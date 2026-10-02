@@ -33,6 +33,7 @@ import OrderStatusForm from '../main/components/forms/order-status-form/OrderSta
 import Notifications from './components/Notifications.vue';
 import GameLinksForm from '../main/components/forms/games/GameLinksForm';
 import FormSearchSelect from './components/FormSearchSelect.vue';
+import GameForm from './components/GameForm.vue';
 
 
 (function() {
@@ -75,6 +76,7 @@ import FormSearchSelect from './components/FormSearchSelect.vue';
     Vue.component('notifications', Notifications);
     Vue.component('game-links-form', GameLinksForm);
     Vue.component('form-search-select', FormSearchSelect);
+    Vue.component('game-form', GameForm);
 
 
 

@@ -93,9 +93,23 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'noCache']], functio
     Route::view('cambiar-contrasena', 'principal.cambiar-contrasena');
     Route::post('cambiar-contrasena', 'Auth\PasswordController@update');
     
-    Route::resource('plataformas', PlatformController::class);
+    Route::post(
+        'juegos/generate-synopsis',
+        [GameController::class, 'generateSynopsis']
+    )->name('admin.juegos.generateSynopsis');
+
+    Route::get(
+        'juegos/generate-missing-synopses',
+        [GameController::class, 'generateMissingSynopses']
+    )->name('admin.juegos.generateMissingSynopses');
+
+
     Route::resource('juegos', GameController::class);
+    Route::resource('plataformas', PlatformController::class);
     Route::resource('regiones', RegionController::class);
     Route::resource('categorias', CategoryController::class);
+
+    
+
 
 });

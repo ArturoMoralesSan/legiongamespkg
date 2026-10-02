@@ -3,95 +3,147 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+
 use Illuminate\Http\Request;
-use App\Models\Region;
+
+use App\Models\Platform;
+
 use Illuminate\Support\Facades\Gate;
+
 use Illuminate\Support\Str;
 
-class RegionController extends Controller
+class PlatformController extends Controller
+
 {
-     /**
+
+    /**
      * LISTADO
      */
     public function index(Request $request)
+
     {
-        $query = Region::query();
+
+        abort_unless(Gate::allows('view.platforms') || Gate::allows('create.platforms'), 403);
+
+        $query = Platform::query();
 
         if ($request->search) {
+
             $query->where('name', 'like', '%' . $request->search . '%');
+
         }
 
-        $regions = $query->orderBy('name', 'asc')->get();
+        $platforms = $query->orderBy('name', 'asc')->get();
 
-        return view('admin.regiones.index', compact('regions'));
+        return view('admin.plataformas.index', compact('platforms'));
+
     }
 
     /**
      * FORM CREATE
      */
     public function create()
+
     {
-        return view('admin.regiones.crear');
+
+        abort_unless(Gate::allows('view.platforms') || Gate::allows('create.platforms'), 403);
+
+        return view('admin.plataformas.crear');
+
     }
 
     /**
      * GUARDAR
      */
     public function store(Request $request)
+
     {
+
+        abort_unless(Gate::allows('view.platforms') || Gate::allows('create.platforms'), 403);
+
         $request->validate([
-            'name' => 'required|string|max:255|unique:regions,name',
+
+            'name' => 'required|string|max:255|unique:platforms,name',
+
         ]);
 
-        Region::create([
+        Platform::create([
+
             'name' => $request->name,
+
             'slug' => Str::slug($request->name),
+
         ]);
 
-        alert('Se ha agregado una región.');
+        alert('Se ha agregado una plataforma.');
 
         return response('', 204, [
-            'Redirect-To' => url('admin/regiones/')
+
+            'Redirect-To' => url('admin/plataformas/')
+
         ]);
+
     }
 
     /**
      * FORM EDIT
      */
-    public function edit(Region $regione)
+    public function edit(Platform $plataforma)
+
     {
-        return view('admin.regiones.editar', compact('regione'));
+
+        abort_unless(Gate::allows('view.platforms') || Gate::allows('create.platforms'), 403);
+
+        return view('admin.plataformas.editar', compact('plataforma'));
+
     }
 
     /**
      * ACTUALIZAR
      */
-    public function update(Request $request, Region $regione)
+    public function update(Request $request, Platform $plataforma)
+
     {
+
+        abort_unless(Gate::allows('view.platforms') || Gate::allows('create.platforms'), 403);
+
         $request->validate([
-            'name' => 'required|string|max:255|unique:regions,name,' . $regione->id,
+
+            'name' => 'required|string|max:255|unique:platforms,name,' . $plataforma->id,
+
         ]);
 
-        $regione->update([
+        $plataforma->update([
+
             'name' => $request->name,
+
             'slug' => Str::slug($request->name),
+
         ]);
 
-        alert('Se ha actualizado una región.');
+        alert('Se ha agregado una plataformas.');
 
         return response('', 204, [
-            'Redirect-To' => url('admin/regiones/')
+
+            'Redirect-To' => url('admin/plataformas/')
+
         ]);
+
     }
 
     /**
      * ELIMINAR
      */
-    public function destroy(Region $region)
+    public function destroy(Platform $plataforma)
+
     {
-        $region->delete();
+
+        abort_unless(Gate::allows('view.platforms') || Gate::allows('create.platforms'), 403);
+
+        $plataforma->delete();
 
         return response('', 204);
 
     }
+
 }

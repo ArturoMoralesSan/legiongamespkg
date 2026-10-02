@@ -31,8 +31,9 @@
 
         </p>
 
-        <base-form
+        <game-form
             action="{{ url('admin/juegos') }}"
+            synopsis-action="{{ url('admin/juegos/generate-synopsis') }}"
             method="POST"
             enctype="multipart/form-data"
             inline-template
@@ -119,11 +120,33 @@
                             </div>
 
                         </div>
-                        <div class="md:col">
+
+                        <div class="md:col mt-4">
 
                             <div class="form-control">
 
-                                <label>Sinopsis</label>
+                                <div class="flex items-center justify-between mb-2">
+
+                                    <label>
+                                        Sinopsis
+                                    </label>
+
+                                    <button
+                                        type="button"
+                                        class="btn btn--small"
+                                        @click="generateSynopsis"
+                                        :disabled="isGeneratingSynopsis"
+                                    >
+                                        <span v-if="isGeneratingSynopsis">
+                                            Generando...
+                                        </span>
+
+                                        <span v-else>
+                                            ✨ Generar sinopsis con IA
+                                        </span>
+                                    </button>
+
+                                </div>
 
                                 <text-area-tiny
                                     name="synopsis"
@@ -233,8 +256,6 @@
 
                         </div>
 
-                        
-
                         <div class="md:col-1/2">
 
                             <multi-select-field
@@ -263,7 +284,7 @@
 
             </form>
 
-        </base-form>
+        </game-form>
 
     </div>
 

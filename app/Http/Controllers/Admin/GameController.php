@@ -19,6 +19,8 @@ class GameController extends Controller
 
     public function search(Request $request)
     {
+        abort_unless(Gate::allows('view.games') || Gate::allows('create.games'), 403);
+
         $query = Game::query()
             ->with(['platforms', 'regions', 'categories']);
 
@@ -66,67 +68,68 @@ class GameController extends Controller
                 ->get()
         );
     }
-     /**
+
+    /**
      * LISTADO
      */
     public function index()
-{
-    abort_unless(
-        Gate::allows('view.games') ||
-        Gate::allows('create.games'),
-        403
-    );
+    {
+        abort_unless(
+            Gate::allows('view.games') ||
+            Gate::allows('create.games'),
+            403
+        );
 
-    $search = request('search');
-    $platform = request('platform');
-    $category = request('category');
+        $search = request('search');
+        $platform = request('platform');
+        $category = request('category');
 
-    $paginatedGames = Game::with([
-        'platforms',
-        'regions',
-        'categories',
-        'links',
-    ])
-    ->when($search, function ($query) use ($search) {
-        $query->where(function ($q) use ($search) {
-            $q->where('title', 'LIKE', "%{$search}%")
-                ->orWhere('description', 'LIKE', "%{$search}%");
-        });
-    })
-    ->when($platform, function ($query) use ($platform) {
-        $query->whereHas('platforms', function ($q) use ($platform) {
-            $q->where('platforms.id', $platform);
-        });
-    })
-    ->when($category, function ($query) use ($category) {
-        $query->whereHas('categories', function ($q) use ($category) {
-            $q->where('categories.id', $category);
-        });
-    })
-    ->orderBy('title')
-    ->paginate(5)
-    ->appends(request()->all());
+        $paginatedGames = Game::with([
+            'platforms',
+            'regions',
+            'categories',
+            'links',
+        ])
+        ->when($search, function ($query) use ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'LIKE', "%{$search}%")
+                    ->orWhere('description', 'LIKE', "%{$search}%");
+            });
+        })
+        ->when($platform, function ($query) use ($platform) {
+            $query->whereHas('platforms', function ($q) use ($platform) {
+                $q->where('platforms.id', $platform);
+            });
+        })
+        ->when($category, function ($query) use ($category) {
+            $query->whereHas('categories', function ($q) use ($category) {
+                $q->where('categories.id', $category);
+            });
+        })
+        ->orderBy('title')
+        ->paginate(20)
+        ->appends(request()->all());
 
-    $platforms = Platform::orderBy('name')->get();
-    $categories = Category::orderBy('name')->get();
+        $platforms = Platform::orderBy('name')->get();
+        $categories = Category::orderBy('name')->get();
 
-    $links = $paginatedGames->links('layout.pagination');
+        $links = $paginatedGames->links('layout.pagination');
 
-    return view('admin.juegos.index', compact(
-        'paginatedGames',
-        'platforms',
-        'categories',
-        'links'
-    ));
-}
-
-
+        return view('admin.juegos.index', compact(
+            'paginatedGames',
+            'platforms',
+            'categories',
+            'links'
+        ));
+    }
 
     /**
      * FORM CREATE
      */
     public function create()
     {
+        abort_unless(Gate::allows('view.games') || Gate::allows('create.games'), 403);
+
         return view('admin.juegos.create', [
             'platforms' => Platform::orderBy('name')->get(),
             'regions' => Region::orderBy('name')->get(),
@@ -140,6 +143,8 @@ class GameController extends Controller
 
     public function store(Request $request)
     {
+        abort_unless(Gate::allows('view.games') || Gate::allows('create.games'), 403);
+
         $request->validate([
             'title' => 'required|string|max:255|unique:games,title',
             'url_game' => 'nullable|max:255',
@@ -263,6 +268,8 @@ class GameController extends Controller
      */
     public function edit(Game $juego)
     {
+        abort_unless(Gate::allows('view.games') || Gate::allows('create.games'), 403);
+
         $juego->load([
             'platforms',
             'regions',
@@ -283,6 +290,8 @@ class GameController extends Controller
      */
     public function update(Request $request, Game $juego)
     {
+        abort_unless(Gate::allows('view.games') || Gate::allows('create.games'), 403);
+
         $request->validate([
 
             'title' => 'required|string|max:255',
@@ -350,7 +359,6 @@ class GameController extends Controller
             $request->categories ?? []
         );
 
-
         /*
         |--------------------------------------------------------------------------
         | ENLACES ADICIONALES
@@ -386,7 +394,6 @@ class GameController extends Controller
             ]);
         }
 
-
         alert('Se ha actualizado un juego.');
 
         return response('', 204, [
@@ -399,6 +406,8 @@ class GameController extends Controller
      */
     public function destroy(Game $juego)
     {
+        abort_unless(Gate::allows('view.games') || Gate::allows('create.games'), 403);
+
         $juego->platforms()->detach();
         $juego->categories()->detach();
 
@@ -413,6 +422,8 @@ class GameController extends Controller
 
     public function alphabet($id)
     {
+        abort_unless(Gate::allows('view.games') || Gate::allows('create.games'), 403);
+
         $platform = Platform::findOrFail($id);
 
         $alphabet = [
@@ -450,6 +461,8 @@ class GameController extends Controller
 
     public function details($id)
     {
+        abort_unless(Gate::allows('view.games') || Gate::allows('create.games'), 403);
+
         $game = Game::with([
             'platforms',
             'categories',
@@ -458,4 +471,409 @@ class GameController extends Controller
 
         return view('principal.details', compact('game'));
     }
+
+    /**
+     * GENERAR SINOPSIS CON IA
+     *
+     * Se utiliza desde el formulario de crear/editar juego.
+     *
+     * NO guarda la información en la base de datos.
+     */
+    public function generateSynopsis(Request $request)
+    {
+        abort_unless(Gate::allows('view.games') || Gate::allows('create.games'), 403);
+
+        $request->validate([
+            'title' => 'required|string|max:255',
+        ]);
+
+        $title = trim($request->title);
+
+        try {
+
+            $synopsis = $this->generateSynopsisWithGemini(
+                $title
+            );
+
+            return response()->json([
+                'success' => true,
+                'title' => $title,
+                'synopsis' => $synopsis,
+            ]);
+
+        } catch (\Throwable $e) {
+
+            \Illuminate\Support\Facades\Log::error(
+                'ERROR GENERANDO SINOPSIS.',
+                [
+                    'title' => $title,
+                    'exception' => get_class($e),
+                    'message' => $e->getMessage(),
+                    'file' => $e->getFile(),
+                    'line' => $e->getLine(),
+                    'trace' => $e->getTraceAsString(),
+                ]
+            );
+
+            return response()->json([
+                'success' => false,
+                'title' => $title,
+                'message' => 'No fue posible generar la sinopsis.',
+                'error' => $e->getMessage(),
+                'exception' => get_class($e),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ], 500);
+        }
+    }
+
+    /**
+     * GENERAR SINOPSIS PARA JUEGOS SIN SINOPSIS
+     *
+     * Busca todos los juegos que no tengan synopsis,
+     * genera la sinopsis con Gemini y la guarda.
+     *
+     * Si Gemini devuelve HTTP 429 (cuota agotada),
+     * el proceso se detiene para evitar más solicitudes.
+     */
+    public function generateMissingSynopses()
+    {
+        abort_unless(Gate::allows('view.games') || Gate::allows('create.games'), 403);
+
+        $games = Game::query()
+            ->where(function ($query) {
+
+                $query->whereNull('synopsis')
+                    ->orWhere('synopsis', '');
+
+            })
+            ->whereNotNull('title')
+            ->where('title', '<>', '')
+            ->get();
+
+        $processed = 0;
+        $generated = 0;
+        $errors = [];
+
+        $quotaExceeded = false;
+        $quotaMessage = null;
+
+        foreach ($games as $game) {
+
+            /*
+            * Si ya se agotó la cuota,
+            * no seguimos enviando solicitudes.
+            */
+            if ($quotaExceeded) {
+                break;
+            }
+
+            $processed++;
+
+            try {
+
+                $synopsis = $this->generateSynopsisWithGemini(
+                    trim($game->title)
+                );
+
+                /*
+                * Guardamos únicamente la sinopsis generada.
+                */
+                $game->synopsis = $synopsis;
+                $game->save();
+
+                $generated++;
+
+            } catch (\Throwable $e) {
+
+                $message = $e->getMessage();
+
+                /*
+                * Detectar cuota agotada de Gemini.
+                */
+                if (
+                    str_contains($message, 'HTTP 429')
+                    || str_contains($message, 'Quota exceeded')
+                    || str_contains($message, 'quota')
+                ) {
+
+                    $quotaExceeded = true;
+                    $quotaMessage = $message;
+
+                    $errors[] = [
+                        'id' => $game->id,
+                        'title' => $game->title,
+                        'message' => $message,
+                    ];
+
+                    \Illuminate\Support\Facades\Log::warning(
+                        'Cuota de Gemini agotada durante generación masiva.',
+                        [
+                            'game_id' => $game->id,
+                            'title' => $game->title,
+                            'message' => $message,
+                            'processed' => $processed,
+                            'generated' => $generated,
+                        ]
+                    );
+
+                    /*
+                    * Detenemos el proceso.
+                    */
+                    break;
+                }
+
+                /*
+                * Cualquier otro error se registra
+                * y continúa con el siguiente juego.
+                */
+                $errors[] = [
+                    'id' => $game->id,
+                    'title' => $game->title,
+                    'message' => $message,
+                ];
+
+                \Illuminate\Support\Facades\Log::error(
+                    'Error generando sinopsis para juego.',
+                    [
+                        'game_id' => $game->id,
+                        'title' => $game->title,
+                        'message' => $message,
+                    ]
+                );
+            }
+        }
+
+        /*
+        * Juegos que todavía permanecen sin synopsis.
+        */
+        $remaining = Game::query()
+            ->where(function ($query) {
+
+                $query->whereNull('synopsis')
+                    ->orWhere('synopsis', '');
+
+            })
+            ->count();
+
+        return response()->json([
+
+            'success' => true,
+
+            'processed' => $processed,
+
+            'generated' => $generated,
+
+            'remaining' => $remaining,
+
+            'quota_exceeded' => $quotaExceeded,
+
+            'quota_message' => $quotaMessage,
+
+            'errors' => $errors,
+
+        ]);
+    }
+
+    /**
+     * GENERAR SINOPSIS UTILIZANDO GEMINI
+     *
+     * Función interna reutilizable por:
+     *
+     * - generateSynopsis()
+     * - generateMissingSynopses()
+     */
+    private function generateSynopsisWithGemini($title)
+    {
+        $apiKey = config('services.gemini.key');
+
+        $model = config(
+            'services.gemini.model',
+            'gemini-3.8-flash'
+        );
+
+        /*
+        * Verificar API Key
+        */
+        if (!$apiKey) {
+
+            throw new \Exception(
+                'La API Key de Gemini no está configurada.'
+            );
+        }
+
+        /*
+        * URL utilizada por Gemini
+        */
+        $url =
+            'https://generativelanguage.googleapis.com/v1beta/models/'
+            . $model
+            . ':generateContent';
+
+        try {
+
+            $response = \Illuminate\Support\Facades\Http::timeout(60)
+                ->withHeaders([
+                    'Content-Type' => 'application/json',
+                    'x-goog-api-key' => $apiKey,
+                ])
+                ->post($url, [
+
+                    'contents' => [
+
+                        [
+
+                            'parts' => [
+
+                                [
+
+                                    'text' =>
+                                        'Genera una sinopsis breve en español '
+                                        . 'de aproximadamente 500 caracteres '
+                                        . 'para el videojuego "'
+                                        . $title
+                                        . '". '
+                                        . 'Usa únicamente información conocida '
+                                        . 'del videojuego. '
+                                        . 'No inventes datos. '
+                                        . 'No menciones que eres una IA. '
+                                        . 'No uses comillas. '
+                                        . 'Devuelve únicamente la sinopsis, '
+                                        . 'sin títulos, listas ni explicaciones.',
+
+                                ],
+
+                            ],
+
+                        ],
+
+                    ],
+
+                ]);
+
+        } catch (\Throwable $e) {
+
+            /*
+            * Error de conexión, timeout, DNS, SSL, etc.
+            */
+            \Illuminate\Support\Facades\Log::error(
+                'ERROR DE CONEXIÓN CON GEMINI.',
+                [
+                    'title' => $title,
+                    'model' => $model,
+                    'url' => $url,
+                    'exception' => get_class($e),
+                    'message' => $e->getMessage(),
+                    'file' => $e->getFile(),
+                    'line' => $e->getLine(),
+                ]
+            );
+
+            throw new \Exception(
+                'No se pudo conectar con Gemini. '
+                . $e->getMessage()
+            );
+        }
+
+        /*
+        * Información básica de la respuesta
+        */
+        $status = $response->status();
+
+        $body = $response->body();
+
+        $json = $response->json();
+
+        /*
+        * Si Gemini devuelve un error HTTP,
+        * mostramos toda la información disponible.
+        */
+        if ($response->failed()) {
+
+            $geminiError = '';
+
+            if (is_array($json)) {
+
+                $geminiError = $json['error']['message']
+                    ?? '';
+
+            }
+
+            \Illuminate\Support\Facades\Log::error(
+                'GEMINI DEVOLVIÓ UN ERROR HTTP.',
+                [
+                    'title' => $title,
+                    'model' => $model,
+                    'url' => $url,
+                    'status' => $status,
+                    'status_text' => $response->reason(),
+                    'gemini_error' => $geminiError,
+                    'body' => $body,
+                    'response_json' => $json,
+                ]
+            );
+
+            throw new \Exception(
+                'Gemini no pudo generar la sinopsis. '
+                . 'HTTP ' . $status
+                . ' - '
+                . (
+                    $geminiError
+                    ?: $response->reason()
+                    ?: 'Error desconocido'
+                )
+            );
+        }
+
+        /*
+        * Obtener la sinopsis.
+        */
+        $synopsis = trim(
+            $response->json(
+                'candidates.0.content.parts.0.text',
+                ''
+            )
+        );
+
+        /*
+        * Gemini respondió correctamente pero
+        * no encontramos texto.
+        */
+        if (!$synopsis) {
+
+            \Illuminate\Support\Facades\Log::error(
+                'GEMINI RESPONDIÓ SIN SINOPSIS.',
+                [
+                    'title' => $title,
+                    'model' => $model,
+                    'url' => $url,
+                    'status' => $status,
+                    'body' => $body,
+                    'response_json' => $json,
+                ]
+            );
+
+            throw new \Exception(
+                'Gemini respondió correctamente, '
+                . 'pero no devolvió una sinopsis. '
+                . 'HTTP ' . $status
+            );
+        }
+
+        /*
+        * Éxito.
+        */
+        \Illuminate\Support\Facades\Log::info(
+            'SINOPSIS GENERADA CORRECTAMENTE.',
+            [
+                'title' => $title,
+                'model' => $model,
+                'status' => $status,
+                'synopsis' => $synopsis,
+            ]
+        );
+
+        return $synopsis;
+    }
+
 }
