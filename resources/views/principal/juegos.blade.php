@@ -35,7 +35,7 @@
         ></game-catalog>
 
     </div>
-
+   
 </section>
 
 @endsection

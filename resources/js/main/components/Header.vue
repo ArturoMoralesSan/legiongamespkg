@@ -3,7 +3,7 @@
         <div class="container header__container">
             <a class="main-header__logo-link" :href="uri" title="Inicio">
                 <img class="main-header__logo-img" :src="logo" alt="">
-                LegionGamesPKG
+                LegionGames
             </a>
             <div class="login-container">
                 <slot name="button-session"></slot>

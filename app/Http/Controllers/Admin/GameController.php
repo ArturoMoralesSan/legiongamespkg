@@ -19,8 +19,6 @@ class GameController extends Controller
 
     public function search(Request $request)
     {
-        abort_unless(Gate::allows('view.games') || Gate::allows('create.games'), 403);
-
         $query = Game::query()
             ->with(['platforms', 'regions', 'categories']);
 
@@ -422,8 +420,6 @@ class GameController extends Controller
 
     public function alphabet($id)
     {
-        abort_unless(Gate::allows('view.games') || Gate::allows('create.games'), 403);
-
         $platform = Platform::findOrFail($id);
 
         $alphabet = [
@@ -461,8 +457,6 @@ class GameController extends Controller
 
     public function details($id)
     {
-        abort_unless(Gate::allows('view.games') || Gate::allows('create.games'), 403);
-
         $game = Game::with([
             'platforms',
             'categories',

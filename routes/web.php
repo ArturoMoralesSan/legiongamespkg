@@ -49,7 +49,9 @@ Route::get('{provider}/callback', [LoginController::class,'handleProviderCallbac
 Route::post('contacto', [HomeController::class, 'SendEmailContact']);
 
 Route::get('noticia/{slug}', [HomeController::class,'news']);
-
+Route::view('/politica-privacidad', 'principal.politica-privacidad')->name('legal.privacidad');
+Route::view('/terminos-condiciones', 'principal.terminos-condiciones')->name('legal.terminos');
+Route::view('/sobre-nosotros', 'principal.sobre-nosotros')->name('legal.about');
 
 Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'noCache']], function() {
     Route::get('/', [DashboardController::class, 'index']);
@@ -98,12 +100,12 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'noCache']], functio
         [GameController::class, 'generateSynopsis']
     )->name('admin.juegos.generateSynopsis');
 
+   /*
     Route::get(
         'juegos/generate-missing-synopses',
         [GameController::class, 'generateMissingSynopses']
     )->name('admin.juegos.generateMissingSynopses');
-
-
+*/
     Route::resource('juegos', GameController::class);
     Route::resource('plataformas', PlatformController::class);
     Route::resource('regiones', RegionController::class);

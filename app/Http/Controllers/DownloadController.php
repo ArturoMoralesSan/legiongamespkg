@@ -9,17 +9,16 @@ class DownloadController extends Controller
 {
     public function show(Game $game)
     {
-        // Retorna a un archivo en resources/
         return view('principal.await', [
             'game' => $game,
-            'downloadUrl' => $game->url_game,
-            'downloadTitle' => 'Te estamos redireccionando',
+            'linkId' => null,
+            'downloadTitle' => 'Estamos por redireccionarte',
         ]);
     }
 
     public function redirect(Game $game)
     {
-        
+        // Estadística solamente para el juego principal
         $game->increment('downloads');
 
         return redirect()->away($game->url_game);
@@ -31,7 +30,7 @@ class DownloadController extends Controller
 
         return view('principal.await', [
             'game' => $game,
-            'downloadUrl' => $gameLink->url,
+            'linkId' => $gameLink->id,
             'downloadTitle' => $gameLink->title,
         ]);
     }

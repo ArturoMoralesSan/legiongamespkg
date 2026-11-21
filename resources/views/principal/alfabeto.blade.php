@@ -43,9 +43,13 @@
         <div class="row">
 
             <div class="md:col-2/3 col">
+
                 <div class="platforms-section">
+
                     <div class="platform-grid">
+
                         @foreach($alphabet as $letter)
+
                             @php
                                 $count = $letters[$letter] ?? 0;
                             @endphp
@@ -61,15 +65,19 @@
                                 <div class="platform-icon image">
 
                                     @if(file_exists(public_path('img/alphabet/'.$letter.'.png')))
+
                                         <img
                                             src="{{ asset('img/alphabet/'.$letter.'.png') }}"
                                             class="letter-image"
                                             alt="{{ $letter }}"
                                         >
+
                                     @else
+
                                         <span class="letter-placeholder">
                                             {{ $letter }}
                                         </span>
+
                                     @endif
 
                                 </div>

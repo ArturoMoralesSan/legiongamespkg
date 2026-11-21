@@ -1,3 +1,12 @@
+<style>
+    .game-row,
+    .game-row * {
+        color: inherit;
+        text-decoration: none;
+        -webkit-tap-highlight-color: transparent;
+    }
+</style>
+
 <div class="game-list">
     <div class="gamelist-header mb-3">
         <h6 class="gamelist--title mb-0">
@@ -12,7 +21,7 @@
     </div>
 
     @foreach($games as $game)
-        <div class="game-row">
+        <a href="{{ route('games.show', $game->id) }}" class="game-row">
              {{-- IMAGEN --}}
              <div class="gamelist-container d-flex">
                 <div class="game-image">
@@ -62,15 +71,14 @@
              </div>
             {{-- ACTIONS --}}
             <div class="game-actions">
-                <a
-                    href="{{ route('games.show', $game->id) }}"
+                <span
                     class="details-btn"
                     title="Ver detalles"
                     aria-label="Ver detalles"
                 >
                     <i class="fa-solid fa-eye"></i>
-                </a>
+                </span>
             </div>
-        </div>
+        </a>
     @endforeach
 </div>

@@ -11,48 +11,48 @@
 <section id="inicio" class="hero-home">
 
     <hero
-        background-image="{{ asset('img/banner1.jpeg') }}"
-        :is-parallax-active="true"
-        hero-height="70vh"
-    >
-        <template slot="container">
-            <div class="hero-grid">
-                <div class="hero-left">
-                    <span class="hero-subtitle">
-                        BIENVENIDO A
-                    </span>
+    background-image="{{ asset('img/banner1.jpeg') }}"
+    :is-parallax-active="true"
+    hero-height="70vh"
+>
+    <template slot="container">
+        <div class="hero-grid">
+            <div class="hero-left">
+                <span class="hero-subtitle">
+                    BIENVENIDO A
+                </span>
 
-                    <h1 class="hero-title">
-                        LEGIONGAMESPKG
-                    </h1>
+                <h1 class="hero-title">
+                    LegionGames
+                </h1>
 
-                    <p class="hero-description">
-                        Tu mejor fuente de juegos para Playstation.
-                        Descargas directas, rápidas y sin límites.
-                    </p>
+                <p class="hero-description">
+                    Tu mejor fuente de juegos.
+                    Descargas directas, rápidas y sin límites.
+                </p>
 
-                    <div class="hero-search">
-                        <form action="{{ url('juegos') }}" method="GET" class="hero-search-form">
+                <div class="hero-search">
+                    <form action="{{ url('juegos') }}" method="GET" class="hero-search-form">
 
-                            <i class="fa-solid fa-magnifying-glass"></i>
+                        <i class="fa-solid fa-magnifying-glass"></i>
 
-                            <input
-                                type="text"
-                                name="search"
-                                placeholder="Buscar juegos..."
-                                autocomplete="off"
-                            >
+                        <input
+                            type="text"
+                            name="search"
+                            placeholder="Buscar juegos..."
+                            autocomplete="off"
+                        >
 
-                            <button type="submit">
-                                Buscar
-                            </button>
+                        <button type="submit">
+                            Buscar
+                        </button>
 
-                        </form>
-                    </div>
+                    </form>
                 </div>
             </div>
-        </template>
-    </hero>
+        </div>
+    </template>
+</hero>
 </section>
 
 {{-- FEATURES --}}
@@ -100,12 +100,15 @@
 <section class="features-section">
     <div class="container">
         <h6 class="gamelist--title  text-center mb-4">
-            Plataformas NPS
+            Consolas Roms
         </h6>
         <div class="platform-grid">
 
             @foreach($platformsgames as $platform)
-                <div class="platform-card">
+                <a
+                    href="{{ url('/plataforma/' . $platform->id .'/alfabeto') }}"
+                    class="platform-card"
+                >
 
                     <div class="platform-icon">
                         @switch(strtolower($platform->name))
@@ -146,13 +149,11 @@
                     </div>
 
                     <div class="platform-count">
-                        <a href="{{ url('/plataforma/' . $platform->id .'/alfabeto') }}">
-                            {{ number_format($platform->games_count) }}
-                            Juegos
-                        </a>
+                        {{ number_format($platform->games_count) }}
+                        Juegos
                     </div>
 
-                </div>
+                </a>
             @endforeach
 
         </div>
