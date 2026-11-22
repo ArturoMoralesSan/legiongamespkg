@@ -42,6 +42,25 @@
     }
 }
 
+/*
+ * Menú móvil: .container (main.css y hero.css) trae z-index: 1 y eso
+ * encerraba el menú (z-index 12) en un contexto de apilamiento de nivel 1,
+ * así que el overlay oscuro, el hero y la barra de usuario se pintaban
+ * encima. Sin z-index aquí, el menú queda sobre todo.
+ */
+@media (max-width: 759px) {
+    .main-header .header__container,
+    .main-header .main-menu {
+        /*
+         * .main-menu (z-index 11) es elemento flex, así que también creaba su
+         * propio nivel y el botón hamburguesa se pintaba sobre la barra de
+         * usuario al hacer scroll. Sin él, el panel del menú (z-index 12)
+         * queda arriba y el botón queda debajo de la barra (z-index 5).
+         */
+        z-index: auto;
+    }
+}
+
 
 /* ==========================================================================
    Logo

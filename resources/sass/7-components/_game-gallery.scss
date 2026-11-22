@@ -1,0 +1,204 @@
+/* ==========================================================================
+   Galería del juego (página de detalle)
+   ========================================================================== */
+
+.game-gallery__slider {
+    position: relative;
+}
+
+.game-gallery__viewport {
+    overflow: hidden;
+    border: 1px solid rgba(139, 92, 246, .16);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, .03);
+}
+
+.game-gallery__track {
+    display: flex;
+    transition: transform .45s ease;
+    will-change: transform;
+}
+
+.game-gallery__slide {
+    display: block;
+    flex: 0 0 100%;
+    aspect-ratio: 16 / 9;
+    cursor: zoom-in;
+}
+
+.game-gallery__slide img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Chevrons (centrados sobre la imagen, sin contar los puntos) */
+.game-gallery__nav {
+    position: absolute;
+    top: calc(50% - 12px);
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border: 0;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 16px;
+    background: rgba(3, 5, 15, .55);
+    cursor: pointer;
+    transform: translateY(-50%);
+    transition: background .2s ease;
+}
+
+.game-gallery__nav:hover,
+.game-gallery__nav:focus-visible {
+    background: rgba(139, 92, 246, .8);
+}
+
+.game-gallery__nav--prev {
+    left: 12px;
+}
+
+.game-gallery__nav--next {
+    right: 12px;
+}
+
+/* Puntitos */
+.game-gallery__dots {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 14px;
+}
+
+.game-gallery__dot {
+    width: 10px;
+    height: 10px;
+    padding: 0;
+    border: 0;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, .25);
+    cursor: pointer;
+    transition: width .25s ease, background .25s ease;
+}
+
+.game-gallery__dot:hover {
+    background: rgba(255, 255, 255, .5);
+}
+
+.game-gallery__dot.is-active {
+    width: 26px;
+    background: #8b5cf6;
+}
+
+@media (max-width: 600px) {
+    .game-gallery__nav {
+        width: 34px;
+        height: 34px;
+        font-size: 13px;
+    }
+}
+
+/* Lightbox */
+.game-lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 60px;
+    background: rgba(3, 5, 15, .92);
+}
+
+.game-lightbox.is-open {
+    display: flex;
+}
+
+.game-lightbox__img {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 10px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, .6);
+}
+
+.game-lightbox__close,
+.game-lightbox__nav {
+    position: absolute;
+    border: 0;
+    color: #fff;
+    background: rgba(255, 255, 255, .1);
+    cursor: pointer;
+    transition: background .2s ease;
+}
+
+.game-lightbox__close:hover,
+.game-lightbox__nav:hover {
+    background: rgba(139, 92, 246, .6);
+}
+
+.game-lightbox__close {
+    top: 14px;
+    right: 14px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 26px;
+    line-height: 1;
+}
+
+.game-lightbox__nav {
+    top: 50%;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    font-size: 18px;
+    transform: translateY(-50%);
+}
+
+.game-lightbox__nav--prev {
+    left: 10px;
+}
+
+.game-lightbox__nav--next {
+    right: 10px;
+}
+
+.game-lightbox__counter {
+    position: absolute;
+    bottom: 14px;
+    left: 50%;
+    color: rgba(255, 255, 255, .7);
+    font-size: 14px;
+    transform: translateX(-50%);
+}
+
+@media (max-width: 600px) {
+    .game-lightbox {
+        padding: 50px 10px;
+    }
+}
+
+/* ==========================================================================
+   Notas rápidas (página de detalle)
+   ========================================================================== */
+
+.game-detail-notes {
+    border-left: 4px solid #f59e0b;
+}
+
+.game-detail-notes h2 i {
+    color: #f59e0b;
+}
+
+.game-detail-notes__text {
+    color: #cbd5e1;
+    font-size: 15px;
+    line-height: 1.7;
+    white-space: normal;
+    overflow-wrap: anywhere;
+}

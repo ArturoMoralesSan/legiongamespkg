@@ -1,10 +1,9 @@
 <template>
     <div class="gallery-panel">
         <draggable v-model="items"
-            :options="{
-                animation: 200,
-                filter: '.gallery-panel__close-btn'
-            }"
+            :animation="200"
+            filter=".gallery-panel__close-btn"
+            :prevent-on-filter="false"
         >
             <transition-group tag="div"
                 class="gallery-panel__showcase"
@@ -39,6 +38,7 @@
                 :id="inputId"
                 type="file"
                 multiple
+                accept="image/jpeg,image/png,image/webp"
                 @change="onAttach"
             >
         </div>
@@ -46,10 +46,11 @@
 </template>
 
 <script>
+    import draggable from 'vuedraggable';
     import GalleryPanelItem from './GalleryPanelItem.vue';
 
     export default {
-        components: { GalleryPanelItem },
+        components: { draggable, GalleryPanelItem },
 
         model: {
             event: 'attached'
@@ -223,6 +224,11 @@
                         file: file
                     });
                 });
+
+                // Permite volver a seleccionar el mismo archivo.
+                if (e.target && e.target.value) {
+                    e.target.value = '';
+                }
             },
 
 

@@ -150,9 +150,9 @@
         </div>
 
         
-        <!-- ANUNCIO -->
+        <!-- ANUNCIO (se administra en Panel > Publicidad > Anuncios, posición "contenido") -->
         <div class="ad-container" style="text-align: center; margin-top: 25px; padding-top: 15px; border-top: 1px solid rgba(255, 255, 255, 0.1);">
-            <script data-cfasync="false" src="\/\/untimely-hello.com\/b\/XNV.sPdYGfl\/0\/Y\/WpcG\/zeomS9zu_ZMUBlMknPxTVcaz_O\/TgIu4SNNT_Mqt\/N\/zMMw5CMpj\/gZ1HNBwZ"></script>
+            @include('partials.ad-slot', ['position' => 'content'])
         </div> 
         
 
@@ -270,8 +270,12 @@
 
     const rxNotice = document.getElementById('rx-block-notice');
 
-    // AdBlock
+    // AdBlock (se activa/desactiva en Panel > Publicidad > Detección de AdBlock)
+    const blockDownloadOnAdBlock = @json(\App\Support\AdBlockSettings::all()['download_block']);
+
     function triggerAdBlock() {
+        if (!blockDownloadOnAdBlock) return;
+
         if (!adBlockDetected) {
             adBlockDetected = true;
             if (typeof interval !== 'undefined') clearInterval(interval);

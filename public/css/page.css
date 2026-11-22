@@ -23,7 +23,16 @@ svg,
     transition: all 0.2s ease;
 }
 
-body.home .user-bar {
+/*
+ * Barra de usuario (sólo con sesión iniciada).
+ * Fija arriba en TODAS las páginas (antes sólo en .home) y se reserva su
+ * espacio con padding para que no tape el header ni el contenido.
+ */
+body.logged {
+    padding-top: 60px;
+}
+
+body.logged .user-bar {
     align-items: center;
     background-color: #0B1421;
     display: flex;
@@ -32,11 +41,20 @@ body.home .user-bar {
     justify-content: space-between;
     position: fixed;
     top: 0;
+    left: 0;
     z-index: 5;
 }
 
+/* Escritorio: el header es fijo, va justo debajo de la barra. */
 body.logged .main-header {
     top: 60px;
+}
+
+/* Móvil: el header no es fijo, así que no se desplaza. */
+@media (max-width: 759px) {
+    body.logged .main-header {
+        top: 0;
+    }
 }
 .details-btn {
     align-items: center;

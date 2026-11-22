@@ -9,6 +9,7 @@ use App\Models\Platform;
 use App\Models\Region;
 use App\Models\Category;
 use App\Models\GameLink;
+use App\Models\GameImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
@@ -149,11 +150,15 @@ class GameController extends Controller
             'size_mb' => 'nullable|string',
             'description' => 'nullable',
             'synopsis' => 'nullable',
+            'notes' => 'nullable|string|max:5000',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
             'platforms' => 'array',
             'regions' => 'array',
             'categories' => 'array',
             'links_count' => 'nullable|integer|min:1',
+            'gallery' => 'nullable|array|max:30',
+            'gallery.*' => 'image|mimes:jpg,jpeg,png,webp|max:4096',
+            'gallery_order' => 'nullable|array',
         ]);
 
         $image = null;
@@ -178,6 +183,7 @@ class GameController extends Controller
             'size_mb' => $request->size_mb,
             'description' => $request->description,
             'synopsis' => $request->synopsis,
+            'notes' => $request->notes,
             'image' => $image,
         ]);
 
@@ -252,6 +258,14 @@ class GameController extends Controller
             ]);
         }
 
+        /*
+        |--------------------------------------------------------------------------
+        | GALERÍA (opcional)
+        |--------------------------------------------------------------------------
+        */
+
+        $this->syncGallery($request, $game);
+
         alert('Se ha añadido un juego.');
 
         return response('', 204, [
@@ -272,11 +286,15 @@ class GameController extends Controller
             'platforms',
             'regions',
             'categories',
-            'links'
+            'links',
+            'images',
         ]);
 
         return view('admin.juegos.editar', [
             'juego' => $juego,
+            'gallery' => $juego->images->map(function ($image) {
+                return ['id' => $image->id, 'thumb' => $image->url];
+            })->values(),
             'platforms' => Platform::orderBy('name')->get(),
             'regions' => Region::orderBy('name')->get(),
             'categories' => Category::orderBy('name')->get(),
@@ -297,10 +315,15 @@ class GameController extends Controller
             'size_mb' => 'nullable|string',
             'url_game' => 'nullable|max:255',
             'description' => 'nullable',
+            'notes' => 'nullable|string|max:5000',
 
             'image' => 'nullable|image|mimes:jpg,jpeg,png|max:1024',
 
             'links_count' => 'nullable|integer|min:0',
+
+            'gallery' => 'nullable|array|max:30',
+            'gallery.*' => 'image|mimes:jpg,jpeg,png,webp|max:4096',
+            'gallery_order' => 'nullable|array',
 
         ]);
 
@@ -342,6 +365,7 @@ class GameController extends Controller
             'size_mb' => $request->size_mb,
             'description' => $request->description,
             'synopsis' => $request->synopsis,
+            'notes' => $request->notes,
             'image' => $image,
         ]);
 
@@ -392,6 +416,14 @@ class GameController extends Controller
             ]);
         }
 
+        /*
+        |--------------------------------------------------------------------------
+        | GALERÍA (opcional)
+        |--------------------------------------------------------------------------
+        */
+
+        $this->syncGallery($request, $juego);
+
         alert('Se ha actualizado un juego.');
 
         return response('', 204, [
@@ -414,8 +446,84 @@ class GameController extends Controller
             unlink(public_path('uploads/games/' . $juego->image));
         }
 
-        $juego->delete();        
+        // Eliminar galería
+        foreach ($juego->images as $galleryImage) {
+            Storage::disk('public')->delete(GameImage::FOLDER . '/' . $galleryImage->image);
+        }
+
+        $juego->delete();
         return response('', 204);
+    }
+
+    /**
+     * Sincroniza la galería del juego.
+     *
+     * El componente <gallery-panel> envía:
+     *  - gallery[]       : sólo los archivos nuevos, en orden.
+     *  - gallery_order[] : el orden final; los IDs de las imágenes que ya
+     *                      existen y el texto 'file' donde va cada archivo
+     *                      nuevo. Ej: [3, 'file', 1, 'file']
+     *
+     * Las imágenes existentes que ya no vienen en gallery_order se eliminan.
+     */
+    private function syncGallery(Request $request, Game $game)
+    {
+        $files = $request->file('gallery', []);
+        $order = (array) $request->input('gallery_order', []);
+
+        // Si llegan archivos sin orden, se agregan al final.
+        if (!$order && $files) {
+            $order = array_fill(0, count($files), 'file');
+        }
+
+        $existing = $game->images()->get()->keyBy('id');
+        $keepIds = [];
+        $fileIndex = 0;
+
+        foreach (array_values($order) as $position => $item) {
+
+            if ($item === 'file') {
+
+                $file = $files[$fileIndex++] ?? null;
+
+                if (!$file) {
+                    continue;
+                }
+
+                $name =
+                    Str::slug($game->title) .
+                    '-' .
+                    uniqid() .
+                    '.' .
+                    $file->getClientOriginalExtension();
+
+                Storage::disk('public')->putFileAs(
+                    GameImage::FOLDER,
+                    $file,
+                    $name
+                );
+
+                $game->images()->create([
+                    'image' => $name,
+                    'order' => $position,
+                ]);
+
+                continue;
+            }
+
+            $id = (int) $item;
+
+            if ($existing->has($id)) {
+                $existing[$id]->update(['order' => $position]);
+                $keepIds[] = $id;
+            }
+        }
+
+        // Eliminar las que el usuario quitó en el panel.
+        foreach ($existing->except($keepIds) as $removed) {
+            Storage::disk('public')->delete(GameImage::FOLDER . '/' . $removed->image);
+            $removed->delete();
+        }
     }
 
     public function alphabet($id)
@@ -461,6 +569,7 @@ class GameController extends Controller
             'platforms',
             'categories',
             'links',
+            'images',
         ])->findOrFail($id);
 
         return view('principal.details', compact('game'));

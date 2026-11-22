@@ -11,6 +11,8 @@ use App\Http\Controllers\Admin\PlatformController;
 use App\Http\Controllers\Admin\GameController;
 use App\Http\Controllers\Admin\RegionController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\AdController;
+use App\Http\Controllers\Admin\AdBlockController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\DownloadController;
 use Illuminate\Support\Facades\Auth;
@@ -110,6 +112,9 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'noCache']], functio
     Route::resource('plataformas', PlatformController::class);
     Route::resource('regiones', RegionController::class);
     Route::resource('categorias', CategoryController::class);
+    Route::resource('anuncios', AdController::class)->except(['show']);
+    Route::get('publicidad/adblock', [AdBlockController::class, 'edit']);
+    Route::put('publicidad/adblock', [AdBlockController::class, 'update']);
 
     
 

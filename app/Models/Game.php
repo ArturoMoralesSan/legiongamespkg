@@ -17,6 +17,7 @@ class Game extends Model
         'size_mb',
         'description',
         'synopsis',
+        'notes',
         'image'
     ];
 
@@ -59,5 +60,13 @@ class Game extends Model
     public function links()
     {
         return $this->hasMany(GameLink::class);
+    }
+
+    /**
+     * Galería opcional del juego, en el orden definido en el panel.
+     */
+    public function images()
+    {
+        return $this->hasMany(GameImage::class)->orderBy('order');
     }
 }

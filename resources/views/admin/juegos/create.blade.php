@@ -160,6 +160,29 @@
 
                         </div>
 
+                        <div class="md:col mt-4">
+
+                            <div class="form-control">
+
+                                <label>
+                                    <i class="fa-regular fa-note-sticky"></i>
+                                    Notas rápidas
+                                    <small>(se muestran en la página del juego, antes de la sinopsis)</small>
+                                </label>
+
+                                <text-area
+                                    name="notes"
+                                    rows="4"
+                                    maxlength="5000"
+                                    v-model="fields.notes"
+                                ></text-area>
+
+                                <field-errors name="notes"></field-errors>
+
+                            </div>
+
+                        </div>
+
                     </div>
 
                 </section>
@@ -229,6 +252,32 @@
                         </div>
 
                     </div>
+
+                </section>
+
+
+                {{-- GALERÍA (opcional) --}}
+
+                <section class="db-panel mb-16">
+
+                    <h3 class="db-panel__title">
+                        Galería <small class="color-gray-darken-1">(opcional)</small>
+                    </h3>
+
+                    <p class="description color-gray-darken-1 mb-6">
+                        Capturas o imágenes adicionales del juego. Se muestran en la
+                        página de detalle. Máximo 30 imágenes de 4 MB (jpeg, jpg, png o webp).
+                    </p>
+
+                    <gallery-panel
+                        name="gallery"
+                        v-model="fields.gallery"
+                        :order.sync="fields.gallery_order"
+                        :errors="{ mime: groupedErrors.gallery || {} }"
+                    ></gallery-panel>
+
+                    <field-errors name="gallery"></field-errors>
+                    <field-errors name="gallery" :array="true"></field-errors>
 
                 </section>
 

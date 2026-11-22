@@ -13,7 +13,11 @@ export default {
 
     data() {
         return {
-            isGeneratingSynopsis: false
+            isGeneratingSynopsis: false,
+            fields: {
+                gallery: [],
+                gallery_order: []
+            }
         };
     },
 
