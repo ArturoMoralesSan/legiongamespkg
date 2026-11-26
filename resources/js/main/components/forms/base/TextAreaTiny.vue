@@ -64,6 +64,36 @@ export default {
 
     },
 
+    watch: {
+
+        /**
+         * Sincroniza el editor cuando el valor cambia desde fuera
+         * (por ejemplo, al generar la sinopsis con IA).
+         */
+        value(newValue) {
+
+            if (!this.quill) {
+                return;
+            }
+
+            const html = newValue || '';
+
+            if (html === this.quill.root.innerHTML) {
+                return;
+            }
+
+            this.quill.setContents([], 'silent');
+
+            if (html) {
+                this.quill.clipboard.dangerouslyPasteHTML(0, html, 'silent');
+            }
+
+            this.onInput();
+
+        }
+
+    },
+
     methods: {
 
         setInitialContent() {
